@@ -21,30 +21,41 @@ $ npm install --save-dev static-site-generator-webpack-plugin
 ```js
 var StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
 
+var paths = [
+  '/hello/',
+  '/world/'
+];
+
 module.exports = {
 
-  entry: './render.js',
+  entry: './index.js',
 
   output: {
-    filename: 'render.js',
+    filename: 'index.js',
     path: 'dist',
     /* IMPORTANT!
-     * You must compile a module that can
-     * can be required in a Node context: */
+     * You must compile to UMD or CommonJS
+     * so it can be required in a Node context: */
     libraryTarget: 'umd'
   },
 
   plugins: [
-    new StaticSiteGeneratorPlugin('render.js', ['/hello/', '/world/'], { locals... })
+    new StaticSiteGeneratorPlugin('index.js', paths, { locals... })
   ]
 
 };
 ```
 
-### render.js
+### index.js
 
 ```js
-module.exports = function(locals, callback) {
+// Client render (optional):
+if (typeof document !== 'undefined') {
+  // Client render code goes here...
+}
+
+// Exported static site renderer:
+module.exports = function render(locals, callback) {
   callback(null, '<html>...</html>');
 };
 ```
@@ -52,7 +63,7 @@ module.exports = function(locals, callback) {
 ### locals
 
 ```js
-// The path currently being rendered
+// The path currently being rendered:
 locals.path;
 
 // An object containing all assets:
@@ -67,21 +78,26 @@ locals.hello === 'world';
 ```js
 var React = require('react');
 var Router = require('react-router');
+
+var Routes = require('./Routes');
 var template = require('./template.ejs');
 
+// Client render (optional):
+if (typeof document !== 'undefined') {
+  Router.run(Routes, Router.HistoryLocation, function(Handler) {
+    React.render(<Handler />, document.getElementById('app'));
+  });
+}
+
+// Exported static site renderer:
 module.exports = function render(locals, callback) {
-
   Router.run(Routes, locals.path, function(Handler) {
-
     var html = template({
       html: React.renderToString(<Handler />),
       assets: locals.assets,
     });
-
     callback(null, html);
-
   });
-
 };
 
 ```
