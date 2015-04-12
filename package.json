@@ -1,0 +1,23 @@
+{
+  "name": "static-site-generator-webpack-plugin",
+  "version": "1.0.0",
+  "description": "Minimal, unopinionated static site generator powered by webpack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/markdalgleish/static-site-generator-webpack-plugin"
+  },
+  "author": "Mark Dalgleish",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/markdalgleish/static-site-generator-webpack-plugin/issues"
+  },
+  "homepage": "https://github.com/markdalgleish/static-site-generator-webpack-plugin",
+  "dependencies": {
+    "bluebird": "^2.9.24",
+    "eval": "^0.1.0"
+  }
+}
