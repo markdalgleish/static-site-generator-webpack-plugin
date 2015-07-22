@@ -24,7 +24,7 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
       var assets = getAssetsFromCompiler(compiler);
 
       var source = asset.source();
-      var render = evaluate(source, /* filename: */ undefined, /* scope: */ undefined, /* noGlobals: */ true);
+      var render = evaluate(source, /* filename: */ undefined, /* scope: */ undefined, /* includeGlobals: */ true);
 
       renderPromises = self.outputPaths.map(function(outputPath) {
         var outputFileName = path.join(outputPath, '/index.html');
