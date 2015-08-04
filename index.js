@@ -18,7 +18,7 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
       var asset = compiler.assets[self.renderSourcePath];
 
       if (asset === undefined) {
-        throw new Error('Soure file not found: "' + self.renderSourcePath + '"');
+        throw new Error('Source file not found: "' + self.renderSourcePath + '"');
       }
 
       var assets = getAssetsFromCompiler(compiler);
