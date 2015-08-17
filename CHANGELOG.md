@@ -3,8 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
-### Changed
-- Nothing yet.
+### Added
+- Support for named assets, allowing the use of hashed file names.
 
 ## 1.0.0 - 2015-04-13
 ### Added

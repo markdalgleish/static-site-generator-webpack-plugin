@@ -2,8 +2,8 @@ var evaluate = require('eval');
 var path = require('path');
 var Promise = require('bluebird');
 
-function StaticSiteGeneratorWebpackPlugin(renderSourcePath, outputPaths, locals) {
-  this.renderSourcePath = renderSourcePath;
+function StaticSiteGeneratorWebpackPlugin(renderSrc, outputPaths, locals) {
+  this.renderSrc = renderSrc;
   this.outputPaths = Array.isArray(outputPaths) ? outputPaths : [outputPaths];
   this.locals = locals;
 }
@@ -14,14 +14,16 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
   compiler.plugin('emit', function(compiler, done) {
     var renderPromises;
 
+    var webpackStatsJson = compiler.getStats().toJson();
+
     try {
-      var asset = compiler.assets[self.renderSourcePath];
+      var asset = findAsset(self.renderSrc, compiler, webpackStatsJson);
 
       if (asset === undefined) {
-        throw new Error('Source file not found: "' + self.renderSourcePath + '"');
+        throw new Error('Source file not found: "' + self.renderSrc + '"');
       }
 
-      var assets = getAssetsFromCompiler(compiler);
+      var assets = getAssetsFromCompiler(compiler, webpackStatsJson);
 
       var source = asset.source();
       var render = evaluate(source, /* filename: */ undefined, /* scope: */ undefined, /* includeGlobals: */ true);
@@ -54,10 +56,29 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
   });
 };
 
+var findAsset = function(src, compiler, webpackStatsJson) {
+  var asset = compiler.assets[src];
+
+  if (asset) {
+    return asset;
+  }
+
+  var chunkValue = webpackStatsJson.assetsByChunkName[src];
+
+  if (!chunkValue) {
+    return null;
+  }
+  // Webpack outputs an array for each chunk when using sourcemaps
+  if (chunkValue instanceof Array) {
+    // Is the main bundle always the first element?
+    chunkValue = chunkValue[0];
+  }
+  return compiler.assets[chunkValue];
+};
+
 // Shamelessly stolen from html-webpack-plugin - Thanks @ampedandwired :)
-var getAssetsFromCompiler = function(compiler) {
+var getAssetsFromCompiler = function(compiler, webpackStatsJson) {
   var assets = {};
-  var webpackStatsJson = compiler.getStats().toJson();
   for (var chunk in webpackStatsJson.assetsByChunkName) {
     var chunkValue = webpackStatsJson.assetsByChunkName[chunk];
 
