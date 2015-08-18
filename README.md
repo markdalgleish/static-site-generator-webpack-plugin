@@ -40,7 +40,7 @@ module.exports = {
   },
 
   plugins: [
-    new StaticSiteGeneratorPlugin('index.js', paths, { locals... })
+    new StaticSiteGeneratorPlugin('main', paths, { locals... })
   ]
 
 };
