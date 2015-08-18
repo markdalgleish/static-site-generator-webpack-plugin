@@ -15,13 +15,15 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
     var renderPromises;
 
     try {
-      var asset = compiler.assets[self.renderSourcePath];
+      var assets = getAssetsFromCompiler(compiler);
+
+      var filename = assets[self.renderSourcePath] || self.renderSourcePath;
+
+      var asset = compiler.assets[filename];
 
       if (asset === undefined) {
         throw new Error('Source file not found: "' + self.renderSourcePath + '"');
       }
-
-      var assets = getAssetsFromCompiler(compiler);
 
       var source = asset.source();
       var render = evaluate(source, /* filename: */ undefined, /* scope: */ undefined, /* includeGlobals: */ true);
