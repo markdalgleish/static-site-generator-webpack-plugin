@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased][unreleased]
 ### Added
 - Support for named assets, allowing the use of hashed file names.
+- Proper error handling so webpack dev server can recover from errors correctly.
 
 ## 1.0.0 - 2015-04-13
 ### Added
