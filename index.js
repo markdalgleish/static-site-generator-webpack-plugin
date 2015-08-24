@@ -19,7 +19,7 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
     try {
       var asset = findAsset(self.renderSrc, compiler, webpackStatsJson);
 
-      if (asset === undefined) {
+      if (asset == null) {
         throw new Error('Source file not found: "' + self.renderSrc + '"');
       }
 
