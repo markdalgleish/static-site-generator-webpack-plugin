@@ -24,6 +24,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Basic asynchronous path rendering
 
 [Unreleased]: https://github.com/markdalgleish/static-site-generator-webpack-plugin/compare/v1.1.2...HEAD
-[1.1.1]: https://github.com/markdalgleish/static-site-generator-webpack-plugin/compare/v1.1.1...v1.1.2
+[1.1.2]: https://github.com/markdalgleish/static-site-generator-webpack-plugin/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/markdalgleish/static-site-generator-webpack-plugin/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/markdalgleish/static-site-generator-webpack-plugin/compare/v1.0.0...v1.1.0
