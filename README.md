@@ -76,28 +76,34 @@ Any additional locals provided in your config are also available.
 
 ## React Router example
 
-```js
-var React = require('react');
-var Router = require('react-router');
+The following example uses [React Router v1.0.0-rc1](https://github.com/rackt/react-router/tree/v1.0.0-rc1) with [history](https://github.com/rackt/history).
 
-var Routes = require('./Routes');
-var template = require('./template.ejs');
+```js
+import React from 'react';
+import createLocation from 'history/lib/createLocation';
+import createBrowserHistory from 'history/lib/createBrowserHistory';
+import { Router, RoutingContext, match } from 'react-router';
+
+import routes from './routes';
+import template from './template.ejs';
 
 // Client render (optional):
 if (typeof document !== 'undefined') {
-  Router.run(Routes, Router.HistoryLocation, function(Handler) {
-    React.render(<Handler />, document.getElementById('app'));
-  });
+  const history = createBrowserHistory();
+  const outlet = document.getElementById('outlet');
+
+  React.render(<Router history={history} routes={routes} />, outlet);
 }
 
 // Exported static site renderer:
-module.exports = function render(locals, callback) {
-  Router.run(Routes, locals.path, function(Handler) {
-    var html = template({
-      html: React.renderToString(<Handler />),
-      assets: locals.assets,
-    });
-    callback(null, html);
+export default (locals, callback) => {
+  const location = createLocation(locals.path);
+
+  match({ routes, location }, (error, redirectLocation, renderProps) => {
+    callback(null, template({
+      html: React.renderToString(<RoutingContext {...renderProps} />),
+      assets: locals.assets
+    }));
   });
 };
 
