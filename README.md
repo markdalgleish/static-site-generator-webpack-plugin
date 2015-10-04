@@ -62,7 +62,7 @@ module.exports = function render(locals, callback) {
 };
 ```
 
-### locals
+### Default locals
 
 ```js
 // The path currently being rendered:
@@ -70,10 +70,9 @@ locals.path;
 
 // An object containing all assets:
 locals.assets;
-
-// Any locals provided in your config are also available:
-locals.hello === 'world';
 ```
+
+Any additional locals provided in your config are also available.
 
 ## React Router example
 
