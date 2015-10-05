@@ -3,8 +3,12 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-### Changed
-- Nothing yet.
+### Added
+- `webpackStats` to `locals` for advanced inspection of webpack's output.
+
+### Fixed
+- Windows support for webpack-dev-server
+- Stack traces in error messages
 
 ## [1.1.2] - 2015-08-24
 ### Fixed
