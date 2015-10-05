@@ -14,7 +14,8 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
   compiler.plugin('emit', function(compiler, done) {
     var renderPromises;
 
-    var webpackStatsJson = compiler.getStats().toJson();
+    var webpackStats = compiler.getStats();
+    var webpackStatsJson = webpackStats.toJson();
 
     try {
       var asset = findAsset(self.renderSrc, compiler, webpackStatsJson);
@@ -34,7 +35,8 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
 
         var locals = {
           path: outputPath,
-          assets: assets
+          assets: assets,
+          webpackStats: webpackStats
         };
 
         for (var prop in self.locals) {
