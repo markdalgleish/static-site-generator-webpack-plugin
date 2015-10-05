@@ -26,7 +26,7 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
       var assets = getAssetsFromCompiler(compiler, webpackStatsJson);
 
       var source = asset.source();
-      var render = evaluate(source, /* filename: */ undefined, /* scope: */ undefined, /* includeGlobals: */ true);
+      var render = evaluate(source, /* filename: */ self.renderSrc, /* scope: */ undefined, /* includeGlobals: */ true);
 
       renderPromises = self.outputPaths.map(function(outputPath) {
         var outputFileName = path.join(outputPath, '/index.html')
@@ -49,13 +49,13 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
             compiler.assets[outputFileName] = createAssetFromContents(output);
           })
           .catch(function(err) {
-            compiler.errors.push(err);
+            compiler.errors.push(err.stack);
           });
       });
 
       Promise.all(renderPromises).nodeify(done);
     } catch (err) {
-      compiler.errors.push(err);
+      compiler.errors.push(err.stack);
       done(err);
     }
   });
