@@ -70,6 +70,9 @@ locals.path;
 
 // An object containing all assets:
 locals.assets;
+
+// Advanced: Webpack's stats object:
+locals.webpackStats;
 ```
 
 Any additional locals provided in your config are also available.
