@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Nothing yet.
+
+## [1.2.0] - 2015-10-06
 ### Added
 - `webpackStats` to `locals` for advanced inspection of webpack's output.
 
@@ -27,7 +31,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Basic asynchronous path rendering
 
-[Unreleased]: https://github.com/markdalgleish/static-site-generator-webpack-plugin/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/markdalgleish/static-site-generator-webpack-plugin/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/markdalgleish/static-site-generator-webpack-plugin/compare/v1.1.2...v1.2.0
 [1.1.2]: https://github.com/markdalgleish/static-site-generator-webpack-plugin/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/markdalgleish/static-site-generator-webpack-plugin/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/markdalgleish/static-site-generator-webpack-plugin/compare/v1.0.0...v1.1.0
