@@ -80,8 +80,7 @@ The following example uses [React Router v1.0.0-rc1](https://github.com/rackt/re
 
 ```js
 import React from 'react';
-import createLocation from 'history/lib/createLocation';
-import createBrowserHistory from 'history/lib/createBrowserHistory';
+import { createHistory, createMemoryHistory } from 'history';
 import { Router, RoutingContext, match } from 'react-router';
 
 import routes from './routes';
@@ -89,7 +88,7 @@ import template from './template.ejs';
 
 // Client render (optional):
 if (typeof document !== 'undefined') {
-  const history = createBrowserHistory();
+  const history = createHistory();
   const outlet = document.getElementById('outlet');
 
   React.render(<Router history={history} routes={routes} />, outlet);
@@ -97,7 +96,8 @@ if (typeof document !== 'undefined') {
 
 // Exported static site renderer:
 export default (locals, callback) => {
-  const location = createLocation(locals.path);
+  const history = createMemoryHistory();
+  const location = history.createLocation(locals.path);
 
   match({ routes, location }, (error, redirectLocation, renderProps) => {
     callback(null, template({
