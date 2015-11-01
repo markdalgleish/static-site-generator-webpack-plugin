@@ -29,6 +29,14 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
       var source = asset.source();
       var render = evaluate(source, /* filename: */ self.renderSrc, /* scope: */ undefined, /* includeGlobals: */ true);
 
+      if (render.hasOwnProperty('__esModule') && render.__esModule) {
+        if (!render.hasOwnProperty('default')) {
+          throw new Error(self.renderSrc + ' has no default export.');
+        }
+
+        render = render.default;
+      }
+
       renderPromises = self.outputPaths.map(function(outputPath) {
         var outputFileName = path.join(outputPath, '/index.html')
           .replace(/^(\/|\\)/, ''); // Remove leading slashes for webpack-dev-server
