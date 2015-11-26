@@ -58,7 +58,7 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
       Promise.all(renderPromises).nodeify(done);
     } catch (err) {
       compiler.errors.push(err.stack);
-      done(err);
+      done();
     }
   });
 };
