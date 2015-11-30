@@ -3,8 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-### Changed
-- Nothing yet.
+### Added
+- Validation that a render function is exported.
 
 ## [1.2.1] - 2015-11-27
 ### Fixed
