@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/markdalgleish/static-site-generator-webpack-plugin",
   "dependencies": {
-    "bluebird": "^2.9.24",
+    "bluebird": "^3.0.5",
     "eval": "^0.1.0"
   }
 }
