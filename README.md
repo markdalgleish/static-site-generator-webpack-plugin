@@ -1,4 +1,4 @@
-[![Gitter](https://img.shields.io/badge/gitter-join%20chat-45cba1.svg?style=flat-square)](https://gitter.im/markdalgleish/static-site-generator-webpack-plugin) [![npm](https://img.shields.io/npm/v/static-site-generator-webpack-plugin.svg?style=flat-square)](https://npmjs.org/package/static-site-generator-webpack-plugin) [![Dependency Status](https://img.shields.io/david/markdalgleish/static-site-generator-webpack-plugin.svg?style=flat-square)](https://david-dm.org/markdalgleish/static-site-generator-webpack-plugin)
+[![Build Status](https://img.shields.io/travis/markdalgleish/static-site-generator-webpack-plugin/master.svg?style=flat-square)](http://travis-ci.org/markdalgleish/static-site-generator-webpack-plugin) [![npm](https://img.shields.io/npm/v/static-site-generator-webpack-plugin.svg?style=flat-square)](https://npmjs.org/package/static-site-generator-webpack-plugin) [![Dependency Status](https://img.shields.io/david/markdalgleish/static-site-generator-webpack-plugin.svg?style=flat-square)](https://david-dm.org/markdalgleish/static-site-generator-webpack-plugin)
 
 # static site generator webpack plugin
 
