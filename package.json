@@ -4,7 +4,7 @@
   "description": "Minimal, unopinionated static site generator powered by webpack",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,11 @@
   "dependencies": {
     "bluebird": "^3.0.5",
     "eval": "^0.1.0"
+  },
+  "devDependencies": {
+    "ejs": "^2.3.4",
+    "mocha": "^2.3.4",
+    "rimraf": "^2.4.4",
+    "webpack": "^1.12.9"
   }
 }
