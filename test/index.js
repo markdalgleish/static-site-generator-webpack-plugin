@@ -1,7 +1,9 @@
 var webpack = require('webpack');
 var fs = require('fs');
 var clean = require('rimraf');
+var glob = require('glob');
 var assert = require('assert');
+var directoryContains = require('./utils/directory-contains');
 
 ['basic', 'es-modules'].forEach(function(caseName) {
 
@@ -19,11 +21,18 @@ var assert = require('assert');
           return done(err);
         }
 
-        var expected = fs.readFileSync(__dirname + '/cases/' + caseName + '/expected-output/index.html', 'utf-8');
-        var actual = fs.readFileSync(__dirname + '/cases/' + caseName + '/actual-output/index.html', 'utf-8');
-        assert.equal(actual, expected);
+        var caseDir = __dirname + '/cases/' + caseName;
+        var expectedDir = caseDir + '/expected-output/';
+        var actualDir = caseDir + '/actual-output/';
 
-        done();
+        directoryContains(expectedDir, actualDir, function(err, result) {
+          if (err) {
+            return done(err);
+          }
+
+          assert.equal(result, true);
+          done();
+        });
       });
     });
 
