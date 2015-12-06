@@ -77,6 +77,25 @@ locals.webpackStats;
 
 Any additional locals provided in your config are also available.
 
+## Custom file names
+
+By providing paths that end in `.html`, you can generate custom file names other than the default `index.html`. Please note that this may break compatibility with your router, if you're using one.
+
+```js
+module.exports = {
+
+  ...
+
+  plugins: [
+    new StaticSiteGeneratorPlugin('main', [
+      '/index.html',
+      '/news.html',
+      '/about.html'
+    ], { locals... })
+  ]
+};
+```
+
 ## React Router example
 
 The following example uses [React Router v1.0.0-rc1](https://github.com/rackt/react-router/tree/v1.0.0-rc1) with [history](https://github.com/rackt/history).
