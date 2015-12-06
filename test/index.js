@@ -5,7 +5,7 @@ var glob = require('glob');
 var assert = require('assert');
 var directoryContains = require('./utils/directory-contains');
 
-['basic', 'es-modules'].forEach(function(caseName) {
+['basic', 'custom-file-names', 'es-modules'].forEach(function(caseName) {
 
   describe(caseName, function () {
 
@@ -13,7 +13,7 @@ var directoryContains = require('./utils/directory-contains');
       clean(__dirname + '/cases/' + caseName + '/actual-output', done);
     });
 
-    it('generates a correct index.html file', function (done) {
+    it('generates the expected HTML files', function (done) {
       var webpackConfig = require('./cases/' + caseName + '/webpack.config.js');
 
       webpack(webpackConfig, function(err, stats) {
