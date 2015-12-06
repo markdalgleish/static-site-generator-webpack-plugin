@@ -4,6 +4,12 @@ var fs = require('fs');
 
 var template = ejs.compile(fs.readFileSync(__dirname + '/template.ejs', 'utf-8'))
 
+var paths = [
+  '/',
+  '/foo',
+  '/foo/bar'
+];
+
 module.exports = {
   entry: {
     main: __dirname + '/index.js'
@@ -30,6 +36,6 @@ module.exports = {
   },
 
   plugins: [
-    new StaticSiteGeneratorPlugin('main', ['/'], { template: template })
+    new StaticSiteGeneratorPlugin('main', paths, { template: template })
   ]
 };
