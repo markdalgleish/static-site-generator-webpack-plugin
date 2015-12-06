@@ -3,8 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-### Changed
-- Nothing yet.
+### Added
+- Support for custom file names other than `index.html`
 
 ## [1.3.0] - 2015-12-01
 ### Added
