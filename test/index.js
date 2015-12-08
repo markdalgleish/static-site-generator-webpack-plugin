@@ -1,13 +1,15 @@
-var webpack = require('webpack');
-var fs = require('fs');
-var clean = require('rimraf');
-var glob = require('glob');
 var expect = require('chai').expect;
+var webpack = require('webpack');
+var clean = require('rimraf');
+var getSubDirsSync = require('./utils/get-sub-dirs-sync');
 var directoryContains = require('./utils/directory-contains');
+
+var successCases = getSubDirsSync(__dirname + '/success-cases');
+var errorCases = getSubDirsSync(__dirname + '/error-cases');
 
 describe('Success cases', function() {
 
-  ['basic', 'custom-file-names', 'es-modules'].forEach(function(successCase) {
+  successCases.forEach(function(successCase) {
 
     describe(successCase, function () {
 
@@ -46,7 +48,7 @@ describe('Success cases', function() {
 
 describe('Error cases', function() {
 
-  ['missing-source'].forEach(function(errorCase) {
+  errorCases.forEach(function(errorCase) {
 
     describe(errorCase, function () {
 
