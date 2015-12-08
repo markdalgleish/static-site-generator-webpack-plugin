@@ -4,7 +4,8 @@
   "description": "Minimal, unopinionated static site generator powered by webpack",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test --timeout 20000"
+    "test": "istanbul cover _mocha test -- --timeout 20000",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "chai": "^3.4.1",
     "ejs": "^2.3.4",
     "glob": "^6.0.1",
+    "istanbul": "^0.4.1",
     "mocha": "^2.3.4",
     "rimraf": "^2.4.4",
     "webpack": "^1.12.9"
