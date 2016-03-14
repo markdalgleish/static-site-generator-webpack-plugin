@@ -96,20 +96,54 @@ var findAsset = function(src, compiler, webpackStatsJson) {
 
 // Shamelessly stolen from html-webpack-plugin - Thanks @ampedandwired :)
 var getAssetsFromCompiler = function(compiler, webpackStatsJson) {
-  var assets = {};
-  for (var chunk in webpackStatsJson.assetsByChunkName) {
-    var chunkValue = webpackStatsJson.assetsByChunkName[chunk];
+  // Get all chunks
+  var chunks = webpackStatsJson.chunks;
+
+  var assets = {
+    // Will contain all js & css files by chunk
+    chunks: {},
+    // Will contain all js files
+    js    : {},
+    // Will contain all css files
+    css   : {}
+  };
+
+  for (var i = 0; i < chunks.length; i++) {
+    var chunk = chunks[i];
+    var chunkName = chunk.names[0];
+
+    assets.chunks[chunkName] = {};
+
+    // Prepend the public path to all chunk files
+    var chunkFiles = [].concat(chunk.files).map(function(chunkFile) {
+      return compiler.options.output.publicPath + chunkFile;
+    });
+
+    // Append a hash for cache busting
+    if (compiler.options.hash) {
+      chunkFiles = chunkFiles.map(function(chunkFile) {
+        return self.appendHash(chunkFile, webpackStatsJson.hash);
+      });
+    }
 
     // Webpack outputs an array for each chunk when using sourcemaps
-    if (chunkValue instanceof Array) {
-      // Is the main bundle always the first element?
-      chunkValue = chunkValue[0];
-    }
+    // But we need only the entry file
+    var entry = chunkFiles[0];
+    assets.chunks[chunkName].size = chunk.size;
+    assets.chunks[chunkName].entry = entry;
+    assets.chunks[chunkName].hash = chunk.hash;
+    assets.js[chunkName] = entry;
 
-    if (compiler.options.output.publicPath) {
-      chunkValue = compiler.options.output.publicPath + chunkValue;
+    // Gather all css files
+    var css = chunkFiles.filter(function(chunkFile) {
+      // Some chunks may contain content hash in their names, for ex. 'main.css?1e7cac4e4d8b52fd5ccd2541146ef03f'.
+      // We must proper handle such cases, so we use regexp testing here
+      return /.css($|\?)/.test(chunkFile);
+    });
+    assets.chunks[chunkName].css = css;
+    if ('string' === typeof css[0]) {
+      assets.css[chunkName] = css[0];
     }
-    assets[chunk] = chunkValue;
   }
 
   return assets;
