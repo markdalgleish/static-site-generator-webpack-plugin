@@ -18,16 +18,25 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
     var webpackStatsJson = webpackStats.toJson();
 
     try {
-      var asset = findAsset(self.renderSrc, compiler, webpackStatsJson);
+      var source = '';
+      var renderSources =
+        Array.isArray(self.renderSrc) ? self.renderSrc : [self.renderSrc];
+      renderSources.forEach(function (renderSource) {
+        var asset = findAsset(renderSource, compiler, webpackStatsJson);
 
-      if (asset == null) {
-        throw new Error('Source file not found: "' + self.renderSrc + '"');
-      }
+        if (asset == null) {
+          throw new Error('Source file not found: "' + renderSource + '"');
+        }
+
+        source = source + '\n' + asset.source();
+      });
 
       var assets = getAssetsFromCompiler(compiler, webpackStatsJson);
-
-      var source = asset.source();
-      var render = evaluate(source, /* filename: */ self.renderSrc, /* scope: */ undefined, /* includeGlobals: */ true);
+      var render = evaluate(
+        source,
+        /* filename: */ renderSources[renderSources.length - 1],
+        /* scope: */ undefined,
+        /* includeGlobals: */ true);
 
       if (render.hasOwnProperty('__esModule')) {
         render = render['default'];
