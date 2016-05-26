@@ -42,7 +42,7 @@ module.exports = {
   },
 
   plugins: [
-    new StaticSiteGeneratorPlugin('main', paths, { locals... })
+    new StaticSiteGeneratorPlugin('main', paths, { locals... }, { scope... })
   ]
 
 };
@@ -94,6 +94,23 @@ module.exports = {
     ], { locals... })
   ]
 };
+```
+
+## Scope
+
+If required, you can provide an object that will exist in the global scope when executing your render function. This is particularly useful if certain libraries or tooling you're using assumes a browser environment.
+
+For example, when using Webpack's `require.ensure`, which assumes that `window` exists:
+
+```js
+const scope = { window: {} };
+
+module.exports = {
+  ...,
+  plugins: [
+    new StaticSiteGeneratorPlugin('main', paths, locals, scope)
+  ]
+}
 ```
 
 ## React Router example
