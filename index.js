@@ -27,7 +27,7 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
       var assets = getAssetsFromCompiler(compiler, webpackStatsJson);
 
       var source = asset.source();
-      var render = evaluate(source, /* filename: */ self.renderSrc, /* scope: */ undefined, /* includeGlobals: */ true);
+      var render = evaluate(source, /* filename: */ self.renderSrc, /* scope: */ {window: {}}, /* includeGlobals: */ true);
 
       if (render.hasOwnProperty('__esModule')) {
         render = render['default'];
