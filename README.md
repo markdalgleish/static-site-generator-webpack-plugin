@@ -16,12 +16,14 @@ $ npm install --save-dev static-site-generator-webpack-plugin
 
 ## Usage
 
+Ensure you have webpack installed, e.g. `npm install -g webpack`
+
 ### webpack.config.js
 
 ```js
-var StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
+const StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
 
-var paths = [
+const paths = [
   '/hello/',
   '/world/'
 ];
@@ -42,7 +44,11 @@ module.exports = {
   },
 
   plugins: [
-    new StaticSiteGeneratorPlugin('main', paths, { locals... }, { scope... })
+    new StaticSiteGeneratorPlugin('main', paths, {
+      // Properties here are merged into `locals`
+      // passed to the exported render function
+      greet: 'Hello'
+    })
   ]
 
 };
@@ -58,7 +64,7 @@ if (typeof document !== 'undefined') {
 
 // Exported static site renderer:
 module.exports = function render(locals, callback) {
-  callback(null, '<html>...</html>');
+  callback(null, '<html>' + locals.greet + ' from ' + locals.path + '</html>');
 };
 ```
 
@@ -91,7 +97,7 @@ module.exports = {
       '/index.html',
       '/news.html',
       '/about.html'
-    ], { locals... })
+    ], locals)
   ]
 };
 ```
