@@ -156,6 +156,11 @@ export default (locals, callback) => {
 
 ```
 
+## Related projects
+
+- [react-router-to-array](https://github.com/alansouzati/react-router-to-array) - useful for avoiding hardcoded lists of routes to render
+- [gatsby](https://github.com/gatsbyjs/gatsby) - opinionated static site generator built on top of this plugin
+
 ## License
 
 [MIT License](http://markdalgleish.mit-license.org)
