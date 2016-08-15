@@ -2,12 +2,14 @@ var evaluate = require('eval');
 var path = require('path');
 var Promise = require('bluebird');
 
-function StaticSiteGeneratorWebpackPlugin(renderSrc, outputPaths, locals, scope) {
+function StaticSiteGeneratorWebpackPlugin(renderSrc, outputPaths, locals, scope, mockWindow) {
   this.renderSrc = renderSrc;
   this.outputPaths = Array.isArray(outputPaths) ? outputPaths : [outputPaths];
   this.locals = locals;
   this.scope = scope;
+  this.mock = mockWindow || false;
 }
+
 
 StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
   var self = this;
@@ -19,6 +21,29 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
     var webpackStatsJson = webpackStats.toJson();
 
     try {
+      if (self.mock) {
+        
+        self.scope.window = self.scope.window || {};
+        self.scope.document = self.scope.document || {};
+        function getAsset (asset) {
+            evaluate(findAsset(asset, compiler, webpackStatsJson).source(), asset, self.scope, true)
+        };
+        function appendChild (elemObj) {
+            self.scope['webpackJsonp'] = self.scope.window['webpackJsonp'];
+            getAsset(elemObj.src)
+        };
+        function getElementsByTagName(tag) {
+            if (tag=="head") return [{appendChild:appendChild}]
+            else raise('Mock used unexpectedly: getELementByTagName(',tag,'), while should be "head"')
+        };
+        function createElement(elem) {
+            if (elem=='script') return {}
+            else raise('Mock used unexpectedly: createElement(',elem,')while should be "script"')
+        };
+        self.scope.document['getElementsByTagName']=getElementsByTagName;
+        self.scope.document['createElement']=createElement;
+        
+      }
       var asset = findAsset(self.renderSrc, compiler, webpackStatsJson);
 
       if (asset == null) {
