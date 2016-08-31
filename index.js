@@ -1,3 +1,4 @@
+var RawSource = require('webpack-sources/lib/RawSource');
 var evaluate = require('eval');
 var path = require('path');
 var Promise = require('bluebird');
@@ -60,7 +61,7 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
         return Promise
           .fromNode(render.bind(null, locals))
           .then(function(output) {
-            compiler.assets[outputFileName] = createAssetFromContents(output);
+            compiler.assets[outputFileName] = new RawSource(output);
           })
           .catch(function(err) {
             compiler.errors.push(err.stack);
@@ -114,17 +115,6 @@ var getAssetsFromCompiler = function(compiler, webpackStatsJson) {
   }
 
   return assets;
-};
-
-var createAssetFromContents = function(contents) {
-  return {
-    source: function() {
-      return contents;
-    },
-    size: function() {
-      return contents.length;
-    }
-  };
 };
 
 module.exports = StaticSiteGeneratorWebpackPlugin;
