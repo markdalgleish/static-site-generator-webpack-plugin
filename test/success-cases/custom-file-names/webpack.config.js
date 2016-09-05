@@ -7,7 +7,9 @@ var template = ejs.compile(fs.readFileSync(__dirname + '/template.ejs', 'utf-8')
 var paths = [
   '/custom.html',
   '/foo/custom.html',
-  '/foo/bar/custom.html'
+  '/foo/bar/custom.html',
+  '/foo/bar/custom_ext.liquid',
+  '/foo.bar/index.html',
 ];
 
 module.exports = {
