@@ -119,6 +119,24 @@ module.exports = {
 }
 ```
 
+## Compression support
+
+Generated files can be compressed with [compression-webpack-plugin](https://github.com/webpack/compression-webpack-plugin), but first ensure that this plugin appears before compression-webpack-plugin in your plugins array:
+
+```js
+const StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+
+module.exports = {
+  ...
+
+  plugins: [
+    new StaticSiteGeneratorPlugin(...),
+    new CompressionPlugin(...)
+  ]
+};
+```
+
 ## React Router example
 
 The following example uses [React Router v1.0.0-rc1](https://github.com/rackt/react-router/tree/v1.0.0-rc1) with [history](https://github.com/rackt/history).
