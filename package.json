@@ -30,7 +30,7 @@
     "chai": "^3.4.1",
     "compression-webpack-plugin": "^0.3.1",
     "coveralls": "^2.11.4",
-    "ejs": "^2.3.4",
+    "ejs": "^2.5.2",
     "glob": "^7.0.3",
     "istanbul": "^0.4.1",
     "mocha": "^3.0.2",
