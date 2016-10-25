@@ -59,8 +59,11 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
             }
           }
 
-          return Promise
-            .fromNode(render.bind(null, locals))
+          var renderPromise = render.length < 2 ?
+            Promise.resolve(render(locals)) :
+            Promise.fromNode(render.bind(null, locals));
+
+          return renderPromise
             .then(function(output) {
               compilation.assets[outputFileName] = new RawSource(output);
             })

@@ -56,15 +56,27 @@ module.exports = {
 
 ### index.js
 
-```js
-// Client render (optional):
-if (typeof document !== 'undefined') {
-  // Client render code goes here...
-}
+#### Sync rendering
 
-// Exported static site renderer:
+```js
+module.exports = function render(locals) {
+  return '<html>' + locals.greet + ' from ' + locals.path + '</html>';
+};
+```
+
+#### Async rendering (callbacks)
+
+```js
 module.exports = function render(locals, callback) {
   callback(null, '<html>' + locals.greet + ' from ' + locals.path + '</html>');
+};
+```
+
+#### Async rendering (promises)
+
+```js
+module.exports = function render(locals) {
+  return Promise.resolve('<html>' + locals.greet + ' from ' + locals.path + '</html>');
 };
 ```
 
