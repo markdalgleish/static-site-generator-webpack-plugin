@@ -124,6 +124,10 @@ function merge (a, b) {
   return a
 }
 
+/*
+ * Function to handle commonschunk plugin. Currently only supports a manifest file and single external
+ * library file name vendor.
+ */
 var loadChunkAssetsToScope = function(scope, compilation, webpackStatsJson) {
   var manifest = findAsset('manifest', compilation, webpackStatsJson);
   var vendor = findAsset('vendor', compilation, webpackStatsJson);
@@ -132,19 +136,20 @@ var loadChunkAssetsToScope = function(scope, compilation, webpackStatsJson) {
     return scope;
   }
 
-  //var manifestRender = evaluate(manifest.source(), 'manifest', self.scope, true);
   if (!scope.window) {
     scope.window = {};
   }
 
   var sandbox = {};
-
   merge(sandbox, scope);
+
   var manifestScript = new vm.Script(manifest.source());
-  var manifestRender = manifestScript.runInNewContext(sandbox, {});
+  manifestScript.runInNewContext(sandbox, {});
+
+  merge(sandbox, sandbox.window)
 
   var vendorScript = new vm.Script(vendor.source());
-  var vendorRender = vendorScript.runInNewContext(sandbox.window, {});
+  vendorScript.runInNewContext(sandbox, {});
 
   return sandbox.window;
 }
