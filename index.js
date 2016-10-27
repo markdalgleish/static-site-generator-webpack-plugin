@@ -4,6 +4,7 @@ var path = require('path');
 var cheerio = require('cheerio');
 var url = require('url');
 var Promise = require('bluebird');
+var vm = require('vm');
 
 function StaticSiteGeneratorWebpackPlugin(options) {
   if (arguments.length > 1) {
