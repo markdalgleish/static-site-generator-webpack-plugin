@@ -2,6 +2,7 @@ var RawSource = require('webpack-sources/lib/RawSource');
 var evaluate = require('eval');
 var path = require('path');
 var Promise = require('bluebird');
+var vm = require('vm');
 
 function StaticSiteGeneratorWebpackPlugin(renderSrc, outputPaths, locals, scope) {
   this.renderSrc = renderSrc;
