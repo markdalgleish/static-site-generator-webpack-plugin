@@ -43,7 +43,6 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
 
         var source = asset.source();
         var render = evaluate(source, /* filename: */ self.renderSrc, /* scope: */ scope, /* includeGlobals: */ true);
-
         if (render.hasOwnProperty('default')) {
           render = render['default'];
         }
@@ -134,6 +133,10 @@ var loadChunkAssetsToScope = function(scope, compilation, webpackStatsJson) {
 
   if (!manifest || !vendor) {
     return scope;
+  }
+
+  if(!scope) {
+    scope = {};
   }
 
   if (!scope.window) {
