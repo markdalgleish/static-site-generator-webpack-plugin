@@ -132,6 +132,37 @@ module.exports = {
 }
 ```
 
+## Asset support
+
+template.ejs
+```ejs
+<% css.forEach(function(file){ %>
+<link href="<%- file %>" rel="stylesheet">
+<% }); %>
+
+<% js.forEach(function(file){ %>
+<script src="<%- file %>" async></script>
+<% }); %>
+```
+
+index.js
+```js
+if (typeof global.document !== 'undefined') {
+  const rootEl = global.document.getElementById('outlay');
+  React.render(
+    <App />,
+    rootEl,
+  );
+}
+
+export default (data) => {
+  const assets = Object.keys(data.webpackStats.compilation.assets);
+  const css = assets.filter(value => value.match(/\.css$/));
+  const js = assets.filter(value => value.match(/\.js$/));
+  return template({ css, js, ...data});
+}
+```
+
 ## Compression support
 
 Generated files can be compressed with [compression-webpack-plugin](https://github.com/webpack/compression-webpack-plugin), but first ensure that this plugin appears before compression-webpack-plugin in your plugins array:
