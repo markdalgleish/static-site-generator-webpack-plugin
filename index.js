@@ -8,6 +8,8 @@ function StaticSiteGeneratorWebpackPlugin(options) {
     options = legacyArgsToOptions.apply(null, arguments);
   }
 
+  options = options || {};
+
   this.entry = options.entry;
   this.paths = Array.isArray(options.paths) ? options.paths : [options.paths || '/'];
   this.locals = options.locals;
