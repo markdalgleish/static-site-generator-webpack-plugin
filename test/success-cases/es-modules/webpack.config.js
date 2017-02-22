@@ -38,6 +38,12 @@ module.exports = {
   devtool: 'source-map',
 
   plugins: [
-    new StaticSiteGeneratorPlugin('main', paths, { template: template })
+    new StaticSiteGeneratorPlugin({
+      entry: 'main',
+      paths: paths,
+      locals: {
+        template: template
+      }
+    })
   ]
 };

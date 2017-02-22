@@ -23,11 +23,6 @@ Ensure you have webpack installed, e.g. `npm install -g webpack`
 ```js
 const StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
 
-const paths = [
-  '/hello/',
-  '/world/'
-];
-
 module.exports = {
 
   entry: {
@@ -45,10 +40,17 @@ module.exports = {
 
   plugins: [
     // `main` is the bundle name sepcified in the `entry` section above.
-    new StaticSiteGeneratorPlugin('main', paths, {
-      // Properties here are merged into `locals`
-      // passed to the exported render function
-      greet: 'Hello'
+    new StaticSiteGeneratorPlugin({
+      entry: 'main',
+      paths: [
+        '/hello/',
+        '/world/'
+      ],
+      locals: {
+        // Properties here are merged into `locals`
+        // passed to the exported render function
+        greet: 'Hello'
+      }
     })
   ]
 
@@ -106,28 +108,35 @@ module.exports = {
   ...
 
   plugins: [
-    new StaticSiteGeneratorPlugin('main', [
-      '/index.html',
-      '/news.html',
-      '/about.html'
-    ], locals)
+    new StaticSiteGeneratorPlugin({
+      entry: 'main',
+      paths: [
+        '/index.html',
+        '/news.html',
+        '/about.html'
+      ]
+    })
   ]
 };
 ```
 
-## Scope
+## Globals
 
 If required, you can provide an object that will exist in the global scope when executing your render function. This is particularly useful if certain libraries or tooling you're using assumes a browser environment.
 
 For example, when using Webpack's `require.ensure`, which assumes that `window` exists:
 
 ```js
-const scope = { window: {} };
-
 module.exports = {
   ...,
   plugins: [
-    new StaticSiteGeneratorPlugin('main', paths, locals, scope)
+    new StaticSiteGeneratorPlugin({
+      entry: 'main',
+      paths: ['/'],
+      globals: {
+        window: {}
+      }
+    })
   ]
 }
 ```

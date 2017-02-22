@@ -23,15 +23,6 @@ module.exports = {
   },
 
   plugins: [
-    new StaticSiteGeneratorPlugin({
-      entry: 'main',
-      paths: paths,
-      locals: {
-        template: template
-      },
-      globals: {
-        window: {}
-      }
-    })
+    new StaticSiteGeneratorPlugin('main', paths, { template: template }, { window: {} })
   ]
 };

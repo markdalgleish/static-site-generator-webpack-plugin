@@ -23,7 +23,13 @@ module.exports = {
   },
 
   plugins: [
-    new StaticSiteGeneratorPlugin('index.js', paths, { template: template }),
+    new StaticSiteGeneratorPlugin({
+      entry: 'index.js',
+      paths: paths,
+      locals: {
+        template: template
+      }
+    }),
     new StatsWriterPlugin() // Causes the asset's `size` method to be called
   ]
 };

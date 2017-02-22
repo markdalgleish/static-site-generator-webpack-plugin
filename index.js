@@ -3,11 +3,15 @@ var evaluate = require('eval');
 var path = require('path');
 var Promise = require('bluebird');
 
-function StaticSiteGeneratorWebpackPlugin(renderSrc, outputPaths, locals, scope) {
-  this.renderSrc = renderSrc;
-  this.outputPaths = Array.isArray(outputPaths) ? outputPaths : [outputPaths];
-  this.locals = locals;
-  this.scope = scope;
+function StaticSiteGeneratorWebpackPlugin(options) {
+  if (arguments.length > 1) {
+    options = legacyArgsToOptions.apply(null, arguments);
+  }
+
+  this.entry = options.entry;
+  this.paths = Array.isArray(options.paths) ? options.paths : [options.paths];
+  this.locals = options.locals;
+  this.globals = options.globals;
 }
 
 StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
@@ -21,26 +25,26 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
       var webpackStatsJson = webpackStats.toJson();
 
       try {
-        var asset = findAsset(self.renderSrc, compilation, webpackStatsJson);
+        var asset = findAsset(self.entry, compilation, webpackStatsJson);
 
         if (asset == null) {
-          throw new Error('Source file not found: "' + self.renderSrc + '"');
+          throw new Error('Source file not found: "' + self.entry + '"');
         }
 
         var assets = getAssetsFromCompilation(compilation, webpackStatsJson);
 
         var source = asset.source();
-        var render = evaluate(source, /* filename: */ self.renderSrc, /* scope: */ self.scope, /* includeGlobals: */ true);
+        var render = evaluate(source, /* filename: */ self.entry, /* scope: */ self.globals, /* includeGlobals: */ true);
 
         if (render.hasOwnProperty('default')) {
           render = render['default'];
         }
 
         if (typeof render !== 'function') {
-          throw new Error('Export from "' + self.renderSrc + '" must be a function that returns an HTML string. Is output.libraryTarget in the configuration set to "umd"?');
+          throw new Error('Export from "' + self.entry + '" must be a function that returns an HTML string. Is output.libraryTarget in the configuration set to "umd"?');
         }
 
-        renderPromises = self.outputPaths.map(function(outputPath) {
+        renderPromises = self.paths.map(function(outputPath) {
           var outputFileName = outputPath.replace(/^(\/|\\)/, ''); // Remove leading slashes for webpack-dev-server
 
           if (!/\.(html?)$/i.test(outputFileName)) {
@@ -121,5 +125,14 @@ var getAssetsFromCompilation = function(compilation, webpackStatsJson) {
 
   return assets;
 };
+
+function legacyArgsToOptions(entry, paths, locals, globals) {
+  return {
+    entry: entry,
+    paths: paths,
+    locals: locals,
+    globals: globals
+  };
+}
 
 module.exports = StaticSiteGeneratorWebpackPlugin;

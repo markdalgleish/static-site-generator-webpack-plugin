@@ -21,7 +21,13 @@ module.exports = {
   },
 
   plugins: [
-    new StaticSiteGeneratorPlugin('index.js', paths, { template: template }),
+    new StaticSiteGeneratorPlugin({
+      entry: 'index.js',
+      paths: paths,
+      locals: {
+        template: template
+      }
+    }),
     new CompressionPlugin({
       asset: '[path].gz[query]',
       algorithm: 'gzip',

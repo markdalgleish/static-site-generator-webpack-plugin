@@ -17,6 +17,12 @@ module.exports = {
   },
 
   plugins: [
-    new StaticSiteGeneratorPlugin('index.js', '/', { template: template })
+    new StaticSiteGeneratorPlugin({
+      entry: 'index.js',
+      paths: '/',
+      locals: {
+        template: template
+      }
+    })
   ]
 };

@@ -21,6 +21,10 @@ module.exports = {
   },
 
   plugins: [
-    new StaticSiteGeneratorPlugin('main', ['/'], locals)
+    new StaticSiteGeneratorPlugin({
+      entry: 'main',
+      paths: ['/'],
+      locals: locals
+    })
   ]
 };
