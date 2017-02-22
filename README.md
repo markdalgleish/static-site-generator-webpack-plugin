@@ -126,7 +126,6 @@ module.exports = {
   ...,
   plugins: [
     new StaticSiteGeneratorPlugin({
-      paths: ['/'],
       globals: {
         window: {}
       }
@@ -175,8 +174,7 @@ module.exports = {
   ...,
   plugins: [
     new StaticSiteGeneratorPlugin({
-      entry: 'main',
-      paths: ['/']
+      entry: 'main'
     })
   ]
 }

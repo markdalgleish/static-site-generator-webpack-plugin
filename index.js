@@ -9,7 +9,7 @@ function StaticSiteGeneratorWebpackPlugin(options) {
   }
 
   this.entry = options.entry;
-  this.paths = Array.isArray(options.paths) ? options.paths : [options.paths];
+  this.paths = Array.isArray(options.paths) ? options.paths : [options.paths || '/'];
   this.locals = options.locals;
   this.globals = options.globals;
 }
