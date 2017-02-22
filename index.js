@@ -37,7 +37,7 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
         }
 
         if (typeof render !== 'function') {
-          throw new Error('Export from "' + self.renderSrc + '" must be a function that returns an HTML string. Is output.targetLib in the configuration set to "umd"?');
+          throw new Error('Export from "' + self.renderSrc + '" must be a function that returns an HTML string. Is output.libraryTarget in the configuration set to "umd"?');
         }
 
         renderPromises = self.outputPaths.map(function(outputPath) {
