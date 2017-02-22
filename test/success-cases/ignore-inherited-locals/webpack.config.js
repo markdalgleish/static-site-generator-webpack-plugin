@@ -9,9 +9,7 @@ var locals = Object.create(localsProto);
 locals.template = template;
 
 module.exports = {
-  entry: {
-    main: __dirname + '/index.js'
-  },
+  entry: __dirname + '/index.js',
 
   output: {
     filename: 'index.js',
@@ -22,7 +20,6 @@ module.exports = {
 
   plugins: [
     new StaticSiteGeneratorPlugin({
-      entry: 'main',
       paths: ['/'],
       locals: locals
     })

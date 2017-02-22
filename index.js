@@ -86,6 +86,12 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
 };
 
 var findAsset = function(src, compilation, webpackStatsJson) {
+  if (!src) {
+    var chunkNames = Object.keys(webpackStatsJson.assetsByChunkName);
+
+    src = chunkNames[0];
+  }
+
   var asset = compilation.assets[src];
 
   if (asset) {

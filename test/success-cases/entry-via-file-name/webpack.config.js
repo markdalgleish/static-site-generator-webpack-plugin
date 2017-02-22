@@ -1,8 +1,15 @@
 var StaticSiteGeneratorPlugin = require('../../../');
+var StatsWriterPlugin = require("webpack-stats-plugin").StatsWriterPlugin;
 var ejs = require('ejs');
 var fs = require('fs');
 
 var template = ejs.compile(fs.readFileSync(__dirname + '/template.ejs', 'utf-8'))
+
+var paths = [
+  '/',
+  '/foo',
+  '/foo/bar'
+];
 
 module.exports = {
   entry: __dirname + '/index.js',
@@ -10,16 +17,17 @@ module.exports = {
   output: {
     filename: 'index.js',
     path: __dirname + '/actual-output',
-    publicPath: '/',
     libraryTarget: 'umd'
   },
 
   plugins: [
     new StaticSiteGeneratorPlugin({
-      paths: '/',
+      entry: 'index.js',
+      paths: paths,
       locals: {
         template: template
       }
-    })
+    }),
+    new StatsWriterPlugin() // Causes the asset's `size` method to be called
   ]
 };

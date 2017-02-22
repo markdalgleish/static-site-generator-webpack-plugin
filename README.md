@@ -25,9 +25,7 @@ const StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin'
 
 module.exports = {
 
-  entry: {
-    'main': './index.js'
-  },
+  entry: './index.js',
 
   output: {
     filename: 'index.js',
@@ -39,9 +37,7 @@ module.exports = {
   },
 
   plugins: [
-    // `main` is the bundle name sepcified in the `entry` section above.
     new StaticSiteGeneratorPlugin({
-      entry: 'main',
       paths: [
         '/hello/',
         '/world/'
@@ -109,7 +105,6 @@ module.exports = {
 
   plugins: [
     new StaticSiteGeneratorPlugin({
-      entry: 'main',
       paths: [
         '/index.html',
         '/news.html',
@@ -131,7 +126,6 @@ module.exports = {
   ...,
   plugins: [
     new StaticSiteGeneratorPlugin({
-      entry: 'main',
       paths: ['/'],
       globals: {
         window: {}
@@ -169,6 +163,22 @@ export default (data) => {
   const css = assets.filter(value => value.match(/\.css$/));
   const js = assets.filter(value => value.match(/\.js$/));
   return template({ css, js, ...data});
+}
+```
+
+## Specifying entry
+
+This plugin defaults to the first chunk found. While this should work in most cases, you can specify the entry name if needed:
+
+```js
+module.exports = {
+  ...,
+  plugins: [
+    new StaticSiteGeneratorPlugin({
+      entry: 'main',
+      paths: ['/']
+    })
+  ]
 }
 ```
 
