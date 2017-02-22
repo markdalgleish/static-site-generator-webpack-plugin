@@ -5,7 +5,7 @@ var Promise = require('bluebird');
 
 function StaticSiteGeneratorWebpackPlugin(renderSrc, outputPaths, locals, scope) {
   this.renderSrc = renderSrc;
-  this.outputPaths = Array.isArray(outputPaths) ? outputPaths : [outputPaths];
+  this.outputPaths = Array.isArray(outputPaths) ? outputPaths : [ outputPaths || renderSrc + '.html' ];
   this.locals = locals;
   this.scope = scope;
 }
