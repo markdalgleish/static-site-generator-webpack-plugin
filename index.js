@@ -2,6 +2,7 @@ var RawSource = require('webpack-sources/lib/RawSource');
 var evaluate = require('eval');
 var path = require('path');
 var Promise = require('bluebird');
+var vm = require('vm');
 
 function StaticSiteGeneratorWebpackPlugin(renderSrc, outputPaths, locals, scope) {
   this.renderSrc = renderSrc;
@@ -27,11 +28,12 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
           throw new Error('Source file not found: "' + self.renderSrc + '"');
         }
 
+        var scope = loadChunkAssetsToScope(self.scope, compilation, webpackStatsJson);
+
         var assets = getAssetsFromCompilation(compilation, webpackStatsJson);
 
         var source = asset.source();
-        var render = evaluate(source, /* filename: */ self.renderSrc, /* scope: */ self.scope, /* includeGlobals: */ true);
-
+        var render = evaluate(source, /* filename: */ self.renderSrc, /* scope: */ scope, /* includeGlobals: */ true);
         if (render.hasOwnProperty('default')) {
           render = render['default'];
         }
@@ -80,6 +82,50 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
     });
   });
 };
+
+function merge (a, b) {
+  if (!a || !b) return a
+  var keys = Object.keys(b)
+  for (var k, i = 0, n = keys.length; i < n; i++) {
+    k = keys[i]
+    a[k] = b[k]
+  }
+  return a
+}
+
+/*
+ * Function to handle commonschunk plugin. Currently only supports a manifest file and single external
+ * library file name vendor.
+ */
+var loadChunkAssetsToScope = function(scope, compilation, webpackStatsJson) {
+  var manifest = findAsset('manifest', compilation, webpackStatsJson);
+  var vendor = findAsset('vendor', compilation, webpackStatsJson);
+
+  if (!manifest || !vendor) {
+    return scope;
+  }
+
+  if(!scope) {
+    scope = {};
+  }
+
+  if (!scope.window) {
+    scope.window = {};
+  }
+
+  var sandbox = {};
+  merge(sandbox, scope);
+
+  var manifestScript = new vm.Script(manifest.source());
+  manifestScript.runInNewContext(sandbox, {});
+
+  merge(sandbox, sandbox.window)
+
+  var vendorScript = new vm.Script(vendor.source());
+  vendorScript.runInNewContext(sandbox, {});
+
+  return sandbox.window;
+}
 
 var findAsset = function(src, compilation, webpackStatsJson) {
   var asset = compilation.assets[src];
