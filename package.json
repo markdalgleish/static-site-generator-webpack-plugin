@@ -1,6 +1,6 @@
 {
   "name": "static-site-generator-webpack-plugin",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "Minimal, unopinionated static site generator powered by webpack",
   "main": "index.js",
   "scripts": {
