@@ -47,12 +47,6 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
         }
 
         renderPromises = self.paths.map(function(outputPath) {
-          var outputFileName = outputPath.replace(/^(\/|\\)/, ''); // Remove leading slashes for webpack-dev-server
-
-          if (!/\.(html?)$/i.test(outputFileName)) {
-            outputFileName = path.join(outputFileName, 'index.html');
-          }
-
           var locals = {
             path: outputPath,
             assets: assets,
@@ -71,7 +65,11 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
 
           return renderPromise
             .then(function(output) {
-              compilation.assets[outputFileName] = new RawSource(output);
+              var outputByPath = typeof output === 'object' ? output : makeObject(outputPath, output);
+
+              Object.keys(outputByPath).forEach(function(key) {
+                compilation.assets[pathToAssetName(key)] = new RawSource(outputByPath[key]);
+              });
             })
             .catch(function(err) {
               compilation.errors.push(err.stack);
@@ -133,6 +131,22 @@ var getAssetsFromCompilation = function(compilation, webpackStatsJson) {
 
   return assets;
 };
+
+function pathToAssetName(outputPath) {
+  var outputFileName = outputPath.replace(/^(\/|\\)/, ''); // Remove leading slashes for webpack-dev-server
+
+  if (!/\.(html?)$/i.test(outputFileName)) {
+    outputFileName = path.join(outputFileName, 'index.html');
+  }
+
+  return outputFileName;
+}
+
+function makeObject(key, value) {
+  var obj = {};
+  obj[key] = value;
+  return obj;
+}
 
 function legacyArgsToOptions(entry, paths, locals, globals) {
   return {

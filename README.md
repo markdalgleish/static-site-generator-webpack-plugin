@@ -55,7 +55,7 @@ module.exports = {
 
 ### index.js
 
-#### Sync rendering
+Sync rendering:
 
 ```js
 module.exports = function render(locals) {
@@ -63,7 +63,7 @@ module.exports = function render(locals) {
 };
 ```
 
-#### Async rendering (callbacks)
+Async rendering via callbacks:
 
 ```js
 module.exports = function render(locals, callback) {
@@ -71,13 +71,29 @@ module.exports = function render(locals, callback) {
 };
 ```
 
-#### Async rendering (promises)
+Async rendering via promises:
 
 ```js
 module.exports = function render(locals) {
   return Promise.resolve('<html>' + locals.greet + ' from ' + locals.path + '</html>');
 };
 ```
+
+### Multi rendering
+
+If you need to generate multiple files per render, or you need to alter the path, you can return an object instead of a string, where each key is the path, and the value is the file contents:
+
+```js
+module.exports = function render() {
+  return {
+    '/': '<html>Home</html>',
+    '/hello': '<html>Hello</html>',
+    '/world': '<html>World</html>'
+  };
+};
+```
+
+Note that this will still be executed for each entry in your `paths` array in your plugin config.
 
 ### Default locals
 
