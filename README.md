@@ -4,7 +4,7 @@
 
 Minimal, unopinionated static site generator powered by webpack.
 
-Bring the world of server rendering to your static build process. Provide a series of paths to be rendered, and a matching set of `index.html` files will be rendered in your output directory by executing your own custom, webpack-compiled render function.
+Bring the world of server rendering to your static build process. Either provide an array of paths to be rendered, or *crawl your site automatically*, and a matching set of `index.html` files will be rendered in your output directory by executing your own custom, webpack-compiled render function.
 
 This plugin works particularly well with universal libraries like [React](https://github.com/facebook/react) and [React Router](https://github.com/rackt/react-router) since it allows you to pre-render your routes at build time, rather than requiring a Node server in production.
 
@@ -79,7 +79,7 @@ module.exports = function render(locals) {
 };
 ```
 
-### Multi rendering
+## Multi rendering
 
 If you need to generate multiple files per render, or you need to alter the path, you can return an object instead of a string, where each key is the path, and the value is the file contents:
 
@@ -95,7 +95,7 @@ module.exports = function render() {
 
 Note that this will still be executed for each entry in your `paths` array in your plugin config.
 
-### Default locals
+## Default locals
 
 ```js
 // The path currently being rendered:
@@ -109,6 +109,42 @@ locals.webpackStats;
 ```
 
 Any additional locals provided in your config are also available.
+
+## Crawl mode
+
+Rather than manually providing a list of paths, you can use the `crawl` option to automatically crawl your site. This will follow all relative links and iframes, executing your render function for each:
+
+```js
+module.exports = {
+
+  ...
+
+  plugins: [
+    new StaticSiteGeneratorPlugin({
+      crawl: true
+    })
+  ]
+};
+```
+
+Note that this can be used in conjunction with the `paths` option to allow multiple crawler entry points:
+
+```js
+module.exports = {
+
+  ...
+
+  plugins: [
+    new StaticSiteGeneratorPlugin({
+      crawl: true,
+      paths: [
+        '/',
+        '/uncrawlable-page/'
+      ]
+    })
+  ]
+};
+```
 
 ## Custom file names
 
