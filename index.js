@@ -202,7 +202,7 @@ function relativePathsFromHtml(options) {
 
       var parsed = url.parse(href);
 
-      if (parsed.protocol) {
+      if (parsed.protocol || typeof parsed.path !== 'string') {
         return null;
       }
 
