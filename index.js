@@ -17,6 +17,7 @@ function StaticSiteGeneratorWebpackPlugin(options) {
   this.locals = options.locals;
   this.globals = options.globals;
   this.crawl = Boolean(options.crawl);
+  this.basename = options.basename;
 }
 
 StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
@@ -49,7 +50,7 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
           throw new Error('Export from "' + self.entry + '" must be a function that returns an HTML string. Is output.libraryTarget in the configuration set to "umd"?');
         }
 
-        renderPaths(self.crawl, self.locals, self.paths, render, assets, webpackStats, compilation)
+        renderPaths(self.crawl, self.basename, self.locals, self.paths, render, assets, webpackStats, compilation)
           .nodeify(done);
       } catch (err) {
         compilation.errors.push(err.stack);
@@ -59,7 +60,7 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
   });
 };
 
-function renderPaths(crawl, userLocals, paths, render, assets, webpackStats, compilation) {
+function renderPaths(crawl, basename, userLocals, paths, render, assets, webpackStats, compilation) {
   var renderPromises = paths.map(function(outputPath) {
     var locals = {
       path: outputPath,
@@ -94,10 +95,11 @@ function renderPaths(crawl, userLocals, paths, render, assets, webpackStats, com
           if (crawl) {
             var relativePaths = relativePathsFromHtml({
               source: rawSource,
-              path: key
+              path: key,
+              basename: basename
             });
 
-            return renderPaths(crawl, userLocals, relativePaths, render, assets, webpackStats, compilation);
+            return renderPaths(crawl, basename, userLocals, relativePaths, render, assets, webpackStats, compilation);
           }
         });
 
@@ -206,9 +208,15 @@ function relativePathsFromHtml(options) {
         return null;
       }
 
-      return parsed.path.indexOf('/') === 0 ?
+      var path = parsed.path.indexOf('/') === 0 ?
         parsed.path :
         url.resolve(currentPath, parsed.path);
+
+      if (path.indexOf(options.basename) === 0) {
+        return path.replace(options.basename, '');
+      }
+
+      return path;
     })
     .filter(function(href) {
       return href != null;
