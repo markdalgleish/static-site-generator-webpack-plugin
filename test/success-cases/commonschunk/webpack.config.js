@@ -29,7 +29,13 @@ module.exports = {
       names: ['vendor', 'manifest'],
       minChunks: Infinity
     }),
-    new StaticSiteGeneratorPlugin('index.js', paths, { template: template }),
+    new StaticSiteGeneratorPlugin({
+      entry: 'index',
+      paths: paths,
+      locals: {
+        template: template
+      }
+    }),
     new StatsWriterPlugin() // Causes the asset's `size` method to be called
   ]
 };
