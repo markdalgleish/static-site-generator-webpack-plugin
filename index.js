@@ -37,12 +37,12 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
           throw new Error('Source file not found: "' + self.entry + '"');
         }
 
-        var scope = loadChunkAssetsToScope(self.scope, compilation, webpackStatsJson);
+        var scope = loadChunkAssetsToScope(self.globals, compilation, webpackStatsJson);
 
         var assets = getAssetsFromCompilation(compilation, webpackStatsJson);
 
         var source = asset.source();
-        var render = evaluate(source, /* filename: */ self.renderSrc, /* scope: */ scope, /* includeGlobals: */ true);
+        var render = evaluate(source, /* filename: */ self.entry, /* scope: */ scope, /* includeGlobals: */ true);
         if (render.hasOwnProperty('default')) {
           render = render['default'];
         }
@@ -128,12 +128,10 @@ function merge (a, b) {
  * library file name vendor.
  */
 var loadChunkAssetsToScope = function(scope, compilation, webpackStatsJson) {
-  var manifest = findAsset('manifest', compilation, webpackStatsJson);
-  var vendor = findAsset('vendor', compilation, webpackStatsJson);
-
-  if (!manifest || !vendor) {
-    return scope;
-  }
+  var chunkNames = Object.keys(webpackStatsJson.assetsByChunkName)
+  var chunkValues = chunkNames.map(function(chunk) {
+    return findAsset(chunk, compilation, webpackStatsJson);
+  });
 
   if(!scope) {
     scope = {};
@@ -146,15 +144,14 @@ var loadChunkAssetsToScope = function(scope, compilation, webpackStatsJson) {
   var sandbox = {};
   merge(sandbox, scope);
 
-  var manifestScript = new vm.Script(manifest.source());
-  manifestScript.runInNewContext(sandbox, {});
+  // CommonChunksPlugin will place webpackJsonP manifest loading in last bundle
+  chunkValues.reverse().map(function(chunk) {
+    var script = new vm.Script(chunk.source());
+    script.runInNewContext(sandbox, {});
+    merge(sandbox, sandbox.window);
+  });
 
-  merge(sandbox, sandbox.window)
-
-  var vendorScript = new vm.Script(vendor.source());
-  vendorScript.runInNewContext(sandbox, {});
-
-  return sandbox.window;
+  return sandbox;
 }
 
 var findAsset = function(src, compilation, webpackStatsJson) {
