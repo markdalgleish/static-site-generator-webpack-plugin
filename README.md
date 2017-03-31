@@ -2,6 +2,8 @@
 
 # static site generator webpack plugin
 
+[![Join the chat at https://gitter.im/markdalgleish/static-site-generator-webpack-plugin](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/markdalgleish/static-site-generator-webpack-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Minimal, unopinionated static site generator powered by webpack.
 
 Bring the world of server rendering to your static build process. Either provide an array of paths to be rendered, or *crawl your site automatically*, and a matching set of `index.html` files will be rendered in your output directory by executing your own custom, webpack-compiled render function.
