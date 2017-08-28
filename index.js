@@ -2,6 +2,7 @@ var RawSource = require('webpack-sources/lib/RawSource');
 var evaluate = require('eval');
 var path = require('path');
 var cheerio = require('cheerio');
+var JSDOM = require('jsdom').JSDOM;
 var url = require('url');
 var Promise = require('bluebird');
 var vm = require('vm');
@@ -127,31 +128,27 @@ function merge (a, b) {
  * Function to handle commonschunk plugin. Currently only supports a manifest file and single external
  * library file name vendor.
  */
-var loadChunkAssetsToScope = function(scope, compilation, webpackStatsJson) {
-  var chunkNames = Object.keys(webpackStatsJson.assetsByChunkName)
+var loadChunkAssetsToScope = function(globals, compilation, webpackStatsJson) {
+  var dom = new JSDOM('', { runScripts: 'outside-only' });
+  var chunkNames = Object.keys(webpackStatsJson.assetsByChunkName);
+
+  // CommonChunksPlugin will place webpackJsonP manifest loading in last bundle
+  if (chunkNames[chunkNames.length - 1] === 'manifest') {
+    chunkNames = ['manifest'].concat(chunkNames.slice(0, -1));
+  }
+
   var chunkValues = chunkNames.map(function(chunk) {
     return findAsset(chunk, compilation, webpackStatsJson);
   });
 
-  if(!scope) {
-    scope = {};
-  }
+  merge(dom.window, globals);
 
-  if (!scope.window) {
-    scope.window = {};
-  }
-
-  var sandbox = {};
-  merge(sandbox, scope);
-
-  // CommonChunksPlugin will place webpackJsonP manifest loading in last bundle
-  chunkValues.reverse().map(function(chunk) {
+  chunkValues.map(function(chunk) {
     var script = new vm.Script(chunk.source());
-    script.runInNewContext(sandbox, {});
-    merge(sandbox, sandbox.window);
+    dom.runVMScript(script);
   });
 
-  return sandbox;
+  return dom.window;
 }
 
 var findAsset = function(src, compilation, webpackStatsJson) {
