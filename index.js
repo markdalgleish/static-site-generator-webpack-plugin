@@ -2,8 +2,10 @@ var RawSource = require('webpack-sources/lib/RawSource');
 var evaluate = require('eval');
 var path = require('path');
 var cheerio = require('cheerio');
+var JSDOM = require('jsdom').JSDOM;
 var url = require('url');
 var Promise = require('bluebird');
+var vm = require('vm');
 
 function StaticSiteGeneratorWebpackPlugin(options) {
   if (arguments.length > 1) {
@@ -36,11 +38,12 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
           throw new Error('Source file not found: "' + self.entry + '"');
         }
 
+        var scope = loadChunkAssetsToScope(self.globals, compilation, webpackStatsJson);
+
         var assets = getAssetsFromCompilation(compilation, webpackStatsJson);
 
         var source = asset.source();
-        var render = evaluate(source, /* filename: */ self.entry, /* scope: */ self.globals, /* includeGlobals: */ true);
-
+        var render = evaluate(source, /* filename: */ self.entry, /* scope: */ scope, /* includeGlobals: */ true);
         if (render.hasOwnProperty('default')) {
           render = render['default'];
         }
@@ -109,6 +112,43 @@ function renderPaths(crawl, userLocals, paths, render, assets, webpackStats, com
   });
 
   return Promise.all(renderPromises);
+}
+
+function merge (a, b) {
+  if (!a || !b) return a
+  var keys = Object.keys(b)
+  for (var k, i = 0, n = keys.length; i < n; i++) {
+    k = keys[i]
+    a[k] = b[k]
+  }
+  return a
+}
+
+/*
+ * Function to handle commonschunk plugin. Currently only supports a manifest file and single external
+ * library file name vendor.
+ */
+var loadChunkAssetsToScope = function(globals, compilation, webpackStatsJson) {
+  var dom = new JSDOM('', { runScripts: 'outside-only' });
+  var chunkNames = Object.keys(webpackStatsJson.assetsByChunkName);
+
+  // CommonChunksPlugin will place webpackJsonP manifest loading in last bundle
+  if (chunkNames[chunkNames.length - 1] === 'manifest') {
+    chunkNames = ['manifest'].concat(chunkNames.slice(0, -1));
+  }
+
+  var chunkValues = chunkNames.map(function(chunk) {
+    return findAsset(chunk, compilation, webpackStatsJson);
+  });
+
+  merge(dom.window, globals);
+
+  chunkValues.map(function(chunk) {
+    var script = new vm.Script(chunk.source());
+    dom.runVMScript(script);
+  });
+
+  return dom.window;
 }
 
 var findAsset = function(src, compilation, webpackStatsJson) {

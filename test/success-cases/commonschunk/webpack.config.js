@@ -1,4 +1,6 @@
 var StaticSiteGeneratorPlugin = require('../../../');
+var StatsWriterPlugin = require("webpack-stats-plugin").StatsWriterPlugin;
+var webpack = require('webpack');
 var ejs = require('ejs');
 var fs = require('fs');
 
@@ -11,36 +13,29 @@ var paths = [
 ];
 
 module.exports = {
-  entry: __dirname + '/index.js',
+  entry: {
+    index: __dirname + '/index.js',
+    vendor: 'bluebird'
+  },
 
   output: {
-    filename: 'index.js',
+    filename: '[name].js',
     path: __dirname + '/actual-output',
-    publicPath: '/',
     libraryTarget: 'umd'
   },
 
-  module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015']
-        }
-      }
-    ]
-  },
-
-  devtool: 'source-map',
-
   plugins: [
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['vendor', 'manifest'],
+      minChunks: Infinity
+    }),
     new StaticSiteGeneratorPlugin({
+      entry: 'index',
       paths: paths,
       locals: {
         template: template
       }
-    })
+    }),
+    new StatsWriterPlugin() // Causes the asset's `size` method to be called
   ]
 };
