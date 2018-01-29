@@ -2,6 +2,8 @@
 
 # static site generator webpack plugin
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/markdalgleish/static-site-generator-webpack-plugin.svg)](https://greenkeeper.io/)
+
 Minimal, unopinionated static site generator powered by webpack.
 
 Bring the world of server rendering to your static build process. Either provide an array of paths to be rendered, or *crawl your site automatically*, and a matching set of `index.html` files will be rendered in your output directory by executing your own custom, webpack-compiled render function.
