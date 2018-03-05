@@ -101,14 +101,34 @@ Note that this will still be executed for each entry in your `paths` array in yo
 // The path currently being rendered:
 locals.path;
 
-// An object containing all assets:
-locals.assets;
-
 // Advanced: Webpack's stats object:
 locals.webpackStats;
 ```
 
-Any additional locals provided in your config are also available.
+## Custom locals
+
+To customise the locals provided to your render function you can use the `locals` option.
+A function passed to this option will be called before each render.
+The result will be used when rendering.
+
+```js
+const template = ejs.compile(templateSource);
+
+module.exports = {
+
+  ...
+
+  plugins: [
+    new StaticSiteGeneratorPlugin({
+      locals: ({ path, webpackStats }) => {
+        template,
+        path,
+        webpackStats
+      }
+    })
+  ]
+}
+```
 
 ## Crawl mode
 
