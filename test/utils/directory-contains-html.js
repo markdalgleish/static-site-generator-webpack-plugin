@@ -21,7 +21,7 @@ module.exports = function(referenceDir, targetDir, done) {
     });
   };
 
-  glob('**/*', { cwd: referenceDir, nodir: true }, function(err, files) {
+  glob('**/*.html', { cwd: referenceDir, nodir: true }, function(err, files) {
     if (err) {
       return done(err);
     }

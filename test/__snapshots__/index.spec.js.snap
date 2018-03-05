@@ -436,3 +436,11 @@ Object {
   "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
 }
 `;
+
+exports[`Success cases transform-locals should generate the expected files 1`] = `
+Object {
+  "bar.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+  "index.html": "<div>/foo/bar.js<br />/foo/main.js</div>",
+  "main.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
