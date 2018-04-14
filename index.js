@@ -16,6 +16,7 @@ function StaticSiteGeneratorWebpackPlugin(options) {
   this.paths = Array.isArray(options.paths) ? options.paths : [options.paths || '/'];
   this.locals = options.locals;
   this.globals = options.globals;
+  this.disallowDomains = options.disallowDomains;
   this.crawl = Boolean(options.crawl);
 }
 
@@ -49,7 +50,7 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
           throw new Error('Export from "' + self.entry + '" must be a function that returns an HTML string. Is output.libraryTarget in the configuration set to "umd"?');
         }
 
-        renderPaths(self.crawl, self.locals, self.paths, render, assets, webpackStats, compilation)
+        renderPaths(self.crawl, self.locals, self.paths, self.disallowDomains, render, assets, webpackStats, compilation)
           .nodeify(done);
       } catch (err) {
         compilation.errors.push(err.stack);
@@ -59,7 +60,7 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
   });
 };
 
-function renderPaths(crawl, userLocals, paths, render, assets, webpackStats, compilation) {
+function renderPaths(crawl, userLocals, paths, disallowDomains, render, assets, webpackStats, compilation) {
   var renderPromises = paths.map(function(outputPath) {
     var locals = {
       path: outputPath,
@@ -94,10 +95,11 @@ function renderPaths(crawl, userLocals, paths, render, assets, webpackStats, com
           if (crawl) {
             var relativePaths = relativePathsFromHtml({
               source: rawSource,
-              path: key
+              path: key,
+              disallowDomains: disallowDomains
             });
 
-            return renderPaths(crawl, userLocals, relativePaths, render, assets, webpackStats, compilation);
+            return renderPaths(crawl, userLocals, relativePaths, disallowDomains, render, assets, webpackStats, compilation);
           }
         });
 
@@ -205,6 +207,10 @@ function relativePathsFromHtml(options) {
       if (parsed.protocol || typeof parsed.path !== 'string') {
         return null;
       }
+
+      if (options.disallowDomains && href.indexOf('.') !== -1) {
+				return null;
+			}
 
       return parsed.path.indexOf('/') === 0 ?
         parsed.path :
