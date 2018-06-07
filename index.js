@@ -22,8 +22,8 @@ function StaticSiteGeneratorWebpackPlugin(options) {
 StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
   var self = this;
 
-  compiler.plugin('this-compilation', function(compilation) {
-    compilation.plugin('optimize-assets', function(_, done) {
+  compiler.hooks.thisCompilation.tap("static-site-generator-webpack-plugin", function(compilation) {
+    compilation.hooks.optimizeAssets.tapAsync("static-site-generator-webpack-plugin", function(_, done) {
       var renderPromises;
 
       var webpackStats = compilation.getStats();
