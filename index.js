@@ -22,8 +22,8 @@ function StaticSiteGeneratorWebpackPlugin(options) {
 StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
   var self = this;
 
-  compiler.plugin('this-compilation', function(compilation) {
-    compilation.plugin('optimize-assets', function(_, done) {
+  addThisCompilationHandler(compiler, function(compilation) {
+    addOptimizeAssetsHandler(compilation, function(_, done) {
       var renderPromises;
 
       var webpackStats = compilation.getStats();
@@ -222,6 +222,24 @@ function legacyArgsToOptions(entry, paths, locals, globals) {
     locals: locals,
     globals: globals
   };
+}
+
+function addThisCompilationHandler(compiler, callback) {
+  if(compiler.hooks) {
+    /* istanbul ignore next */
+    compiler.hooks.thisCompilation.tap('static-site-generator-webpack-plugin', callback);
+  } else {
+    compiler.plugin('this-compilation', callback);
+  }
+}
+
+function addOptimizeAssetsHandler(compilation, callback) {
+  if(compilation.hooks) {
+    /* istanbul ignore next */
+    compilation.hooks.optimizeAssets.tapAsync('static-site-generator-webpack-plugin',callback);
+  } else {
+    compilation.plugin('optimize-assets', callback);
+  }
 }
 
 module.exports = StaticSiteGeneratorWebpackPlugin;
