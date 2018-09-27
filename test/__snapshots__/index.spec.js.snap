@@ -1,0 +1,438 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Success cases basic should generate the expected files 1`] = `
+Object {
+  "foo/bar/index.html": "<html>
+  <body>
+    <h1>/foo/bar</h1>
+  </body>
+</html>
+",
+  "foo/index.html": "<html>
+  <body>
+    <h1>/foo</h1>
+  </body>
+</html>
+",
+  "index.html": "<html>
+  <body>
+    <h1>/</h1>
+  </body>
+</html>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+  "stats.json": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases basic-promise should generate the expected files 1`] = `
+Object {
+  "foo/bar/index.html": "<html>
+  <body>
+    <h1>/foo/bar</h1>
+  </body>
+</html>
+",
+  "foo/index.html": "<html>
+  <body>
+    <h1>/foo</h1>
+  </body>
+</html>
+",
+  "index.html": "<html>
+  <body>
+    <h1>/</h1>
+  </body>
+</html>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+  "stats.json": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases basic-sync should generate the expected files 1`] = `
+Object {
+  "foo/bar/index.html": "<html>
+  <body>
+    <h1>/foo/bar</h1>
+  </body>
+</html>
+",
+  "foo/index.html": "<html>
+  <body>
+    <h1>/foo</h1>
+  </body>
+</html>
+",
+  "index.html": "<html>
+  <body>
+    <h1>/</h1>
+  </body>
+</html>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+  "stats.json": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases compression should generate the expected files 1`] = `
+Object {
+  "index.html": "<html>
+  <body>
+    <h1>/</h1>
+  </body>
+</html>
+",
+  "index.html.gz": "CONTENTS IGNORED IN SNAPSHOT TEST",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases crawl-ignore should generate the expected files 1`] = `
+Object {
+  "index.html": "<p>Don't crawl these:</p>
+<ul>
+  <li><a href=\\"http://webpack.js.org\\">Absolute Link</a></li>
+  <li><a href=\\"//webpack.js.org\\">Protocol Relative Link</a></li>
+  <li><a href=\\"mailto:hello@example.com\\">Email Link</a></li>
+  <li><a href=\\"#hashtown\\">Hash Link</a></li>
+</ul>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases crawl-relative should generate the expected files 1`] = `
+Object {
+  "foo/bar/baz/index.html": "<h1>/foo/bar/baz</h1>
+
+<a href=\\"../../../\\">Crawl this</a>
+",
+  "foo/bar/index.html": "<h1>/foo/bar</h1>
+
+<a href=\\"./bar/baz\\">Crawl this</a>
+",
+  "foo/index.html": "<h1>/foo</h1>
+
+<a href=\\"./foo/bar\\">Crawl this</a>
+",
+  "index.html": "<h1>/</h1>
+
+<a href=\\"foo\\">Crawl this</a>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases crawl-relative-iframes should generate the expected files 1`] = `
+Object {
+  "foo/bar/baz/index.html": "<h1>/foo/bar/baz</h1>
+
+<iframe src=\\"javascript:void(0)\\" />
+",
+  "foo/bar/index.html": "<h1>/foo/bar</h1>
+
+<iframe src=\\"./bar/baz\\" />
+",
+  "foo/index.html": "<h1>/foo</h1>
+
+<iframe src=\\"./foo/bar\\" />
+",
+  "index.html": "<h1>/</h1>
+
+<iframe src=\\"./foo\\" />
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases crawl-root-relative should generate the expected files 1`] = `
+Object {
+  "foo/bar/index.html": "<h1>/foo/bar</h1>
+
+<a href=\\"/\\">Crawl this</a>
+",
+  "foo/index.html": "<h1>/foo</h1>
+
+<a href=\\"/foo/bar\\">Crawl this</a>
+",
+  "index.html": "<h1>/</h1>
+
+<a href=\\"/foo\\">Crawl this</a>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases crawl-root-relative-iframes should generate the expected files 1`] = `
+Object {
+  "foo/bar/index.html": "<h1>/foo/bar</h1>
+
+<iframe src=\\"javascript:void(0)\\" />
+",
+  "foo/index.html": "<h1>/foo</h1>
+
+<iframe src=\\"/foo/bar\\" />
+",
+  "index.html": "<h1>/</h1>
+
+<iframe src=\\"/foo\\" />
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases custom-file-names should generate the expected files 1`] = `
+Object {
+  "custom.html": "<html>
+  <body>
+    <h1>/custom.html</h1>
+  </body>
+</html>
+",
+  "foo/bar/custom.html": "<html>
+  <body>
+    <h1>/foo/bar/custom.html</h1>
+  </body>
+</html>
+",
+  "foo/custom.html": "<html>
+  <body>
+    <h1>/foo/custom.html</h1>
+  </body>
+</html>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases default-entry-when-named should generate the expected files 1`] = `
+Object {
+  "foo/bar/index.html": "<html>
+  <body>
+    <h1>/foo/bar</h1>
+  </body>
+</html>
+",
+  "foo/index.html": "<html>
+  <body>
+    <h1>/foo</h1>
+  </body>
+</html>
+",
+  "index.html": "<html>
+  <body>
+    <h1>/</h1>
+  </body>
+</html>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+  "stats.json": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases entry-via-file-name should generate the expected files 1`] = `
+Object {
+  "foo/bar/index.html": "<html>
+  <body>
+    <h1>/foo/bar</h1>
+  </body>
+</html>
+",
+  "foo/index.html": "<html>
+  <body>
+    <h1>/foo</h1>
+  </body>
+</html>
+",
+  "index.html": "<html>
+  <body>
+    <h1>/</h1>
+  </body>
+</html>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+  "stats.json": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases entry-via-name should generate the expected files 1`] = `
+Object {
+  "foo/bar/index.html": "<html>
+  <body>
+    <h1>/foo/bar</h1>
+  </body>
+</html>
+",
+  "foo/index.html": "<html>
+  <body>
+    <h1>/foo</h1>
+  </body>
+</html>
+",
+  "index.html": "<html>
+  <body>
+    <h1>/</h1>
+  </body>
+</html>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+  "stats.json": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases es-modules should generate the expected files 1`] = `
+Object {
+  "foo/bar/index.html": "<html>
+  <body>
+    <h1>/foo/bar</h1>
+  </body>
+</html>
+",
+  "foo/index.html": "<html>
+  <body>
+    <h1>/foo</h1>
+  </body>
+</html>
+",
+  "index.html": "<html>
+  <body>
+    <h1>/</h1>
+  </body>
+</html>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+  "index.js.map": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases ignore-inherited-locals should generate the expected files 1`] = `
+Object {
+  "index.html": "<html>
+  <body>
+    <h1>\\"DONT_INCLUDE_ME\\" is in locals: false</h1>
+  </body>
+</html>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases legacy-args should generate the expected files 1`] = `
+Object {
+  "1.index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+  "foo/bar/index.html": "<html>
+  <body>
+    <h1>/foo/bar</h1>
+  </body>
+</html>
+",
+  "foo/index.html": "<html>
+  <body>
+    <h1>/foo</h1>
+  </body>
+</html>
+",
+  "index.html": "<html>
+  <body>
+    <h1>/</h1>
+  </body>
+</html>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases multi-render should generate the expected files 1`] = `
+Object {
+  "foo/bar/index.html": "<html>
+  <body>
+    <h1>/foo/bar</h1>
+  </body>
+</html>
+",
+  "foo/index.html": "<html>
+  <body>
+    <h1>/foo</h1>
+  </body>
+</html>
+",
+  "index.html": "<html>
+  <body>
+    <h1>/</h1>
+  </body>
+</html>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+  "stats.json": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases multi-render-custom-file-names should generate the expected files 1`] = `
+Object {
+  "custom.html": "<html>
+  <body>
+    <h1>/custom.html</h1>
+  </body>
+</html>
+",
+  "foo/bar/custom.html": "<html>
+  <body>
+    <h1>/foo/bar/custom.html</h1>
+  </body>
+</html>
+",
+  "foo/custom.html": "<html>
+  <body>
+    <h1>/foo/custom.html</h1>
+  </body>
+</html>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases no-options-provided should generate the expected files 1`] = `
+Object {
+  "index.html": "[\\"path\\",\\"assets\\",\\"webpackStats\\"]",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+  "stats.json": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases require-ensure should generate the expected files 1`] = `
+Object {
+  "1.index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+  "foo/bar/index.html": "<html>
+  <body>
+    <h1>/foo/bar</h1>
+  </body>
+</html>
+",
+  "foo/index.html": "<html>
+  <body>
+    <h1>/foo</h1>
+  </body>
+</html>
+",
+  "index.html": "<html>
+  <body>
+    <h1>/</h1>
+  </body>
+</html>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
+exports[`Success cases single-path should generate the expected files 1`] = `
+Object {
+  "index.html": "<html>
+  <body>
+    <h1>/</h1>
+  </body>
+</html>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
