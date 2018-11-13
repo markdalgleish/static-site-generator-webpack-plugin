@@ -39,7 +39,7 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
         var assets = getAssetsFromCompilation(compilation, webpackStatsJson);
 
         var source = asset.source();
-        var render = evaluate(source, /* filename: */ self.entry, /* scope: */ self.globals, /* includeGlobals: */ true);
+        var render = evaluate(source, /* filename: */ (typeof self.entry === "string") ? self.entry : "index.js", /* scope: */ self.globals, /* includeGlobals: */ true);
 
         if (render.hasOwnProperty('default')) {
           render = render['default'];
@@ -116,6 +116,10 @@ var findAsset = function(src, compilation, webpackStatsJson) {
     var chunkNames = Object.keys(webpackStatsJson.assetsByChunkName);
 
     src = chunkNames[0];
+  }
+  
+  if (typeof src === "function") {
+    return src(compilation.assets);
   }
 
   var asset = compilation.assets[src];
