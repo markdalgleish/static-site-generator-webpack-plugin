@@ -206,13 +206,12 @@ function relativePathsFromHtml(options) {
 
       var parsed = url.parse(href);
 
-      if (parsed.protocol || typeof parsed.path !== 'string') {
+      if (parsed.protocol || typeof parsed.pathname !== 'string') {
         return null;
       }
-
-      return parsed.path.indexOf('/') === 0 ?
-        parsed.path :
-        url.resolve(currentPath, parsed.path);
+      return parsed.pathname.indexOf('/') === 0 ?
+        parsed.pathname :
+        url.resolve(currentPath, parsed.pathname);
     })
     .filter(function(href) {
       return href != null;

@@ -88,6 +88,32 @@ Object {
 }
 `;
 
+exports[`Success cases crawl-duplicates should generate the expected files 1`] = `
+Object {
+  "bar/index.html": "<h1>/bar</h1>
+
+<a href=\\"baz#oz\\">Crawl this</a>
+<a href=\\"baz\\">And this</a>
+",
+  "baz/index.html": "<h1>/baz</h1>
+
+<a href=\\"baz#oz\\">Crawl this</a>
+<a href=\\"baz\\">And this</a>
+",
+  "foo/index.html": "<h1>/foo</h1>
+
+<a href=\\"baz?m=1\\">Crawl this</a>
+<a href=\\"baz\\">And this</a>
+",
+  "index.html": "<h1>/</h1>
+
+<a href=\\"foo\\">Crawl this</a>
+<a href=\\"bar\\">And this</a>
+",
+  "index.js": "CONTENTS IGNORED IN SNAPSHOT TEST",
+}
+`;
+
 exports[`Success cases crawl-ignore should generate the expected files 1`] = `
 Object {
   "index.html": "<p>Don't crawl these:</p>
