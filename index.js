@@ -5,16 +5,20 @@ var cheerio = require('cheerio');
 var url = require('url');
 var Promise = require('bluebird');
 
+function defaultLocalsTransform(locals) {
+  return locals;
+}
+
 function StaticSiteGeneratorWebpackPlugin(options) {
   if (arguments.length > 1) {
     options = legacyArgsToOptions.apply(null, arguments);
   }
 
-  options = options || {};
+  options = normalizeOptions(options);
 
   this.entry = options.entry;
   this.paths = Array.isArray(options.paths) ? options.paths : [options.paths || '/'];
-  this.locals = options.locals;
+  this.locals = options.locals || defaultLocalsTransform;
   this.globals = options.globals;
   this.crawl = Boolean(options.crawl);
 }
@@ -59,19 +63,13 @@ StaticSiteGeneratorWebpackPlugin.prototype.apply = function(compiler) {
   });
 };
 
-function renderPaths(crawl, userLocals, paths, render, assets, webpackStats, compilation) {
+function renderPaths(crawl, transformLocals, paths, render, assets, webpackStats, compilation) {
   var renderPromises = paths.map(function(outputPath) {
-    var locals = {
+    var locals = transformLocals({
       path: outputPath,
       assets: assets,
       webpackStats: webpackStats
-    };
-
-    for (var prop in userLocals) {
-      if (userLocals.hasOwnProperty(prop)) {
-        locals[prop] = userLocals[prop];
-      }
-    }
+    });
 
     var renderPromise = render.length < 2 ?
       Promise.resolve(render(locals)) :
@@ -97,7 +95,7 @@ function renderPaths(crawl, userLocals, paths, render, assets, webpackStats, com
               path: key
             });
 
-            return renderPaths(crawl, userLocals, relativePaths, render, assets, webpackStats, compilation);
+            return renderPaths(crawl, transformLocals, relativePaths, render, assets, webpackStats, compilation);
           }
         });
 
@@ -217,6 +215,25 @@ function relativePathsFromHtml(options) {
     .filter(function(href) {
       return href != null;
     });
+}
+
+function normalizeOptions(legacyOptions) {
+  var options = Object.assign({}, legacyOptions);
+
+  if (options.locals && typeof options.locals !== 'function') {
+    var userLocals = options.locals;
+    options.locals = (defaultLocals) => {
+      return Object.assign(
+        {
+          webpackStats: defaultLocals.webpackStats,
+          path: defaultLocals.path,
+          assets: defaultLocals.assets
+        },
+        userLocals
+      );
+    };
+  }
+  return options;
 }
 
 function legacyArgsToOptions(entry, paths, locals, globals) {
