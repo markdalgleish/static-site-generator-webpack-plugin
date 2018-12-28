@@ -136,6 +136,12 @@ var findAsset = function(src, compilation, webpackStatsJson) {
       return /\.js$/.test(filename);
     });
   }
+  // As of Webpack v5 assets described in assetsByChunkName may
+  // now be an object with parameter name
+  if (chunkValue.name) {
+    chunkValue = chunkValue.name;
+  }
+
   return compilation.assets[chunkValue];
 };
 
