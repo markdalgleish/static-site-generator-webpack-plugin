@@ -146,6 +146,24 @@ module.exports = {
 };
 ```
 
+If your app uses `basename` in React Router or other routers with similar
+behavior to prefix links and routes with a url segment, you can include a
+`basename` option and the crawler will account for it when evaluating links:
+
+```js
+module.exports = {
+
+  ...
+
+  plugins: [
+    new StaticSiteGeneratorPlugin({
+      crawl: true,
+      basename: '/your-project-name/docs'
+    })
+  ]
+};
+```
+
 ## Custom file names
 
 By providing paths that end in `.html`, you can generate custom file names other than the default `index.html`. Please note that this may break compatibility with your router, if you're using one.
